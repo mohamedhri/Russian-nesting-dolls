@@ -13,8 +13,6 @@ public class Main {
 
         int choice;
 
-
-
         do {
             printMenu();
             choice = scanner.nextInt();
@@ -30,8 +28,7 @@ public class Main {
                     placeDollMenu(firstDoll, secondDoll, thirdDoll);
                     break;
                 case 4:
-                    placeDollMenu(secondDoll, thirdDoll);
-                    break;
+                    break; // Removed choice 4
                 case 5:
                     System.out.println("Sortie de l'application.");
                     break;
@@ -44,17 +41,15 @@ public class Main {
 
         scanner.close();
     }
+
     private static void printMenu() {
         System.out.println("Menu :");
         System.out.println("1. Jouer avec les poupées");
         System.out.println("2. Afficher les informations des poupées");
-        System.out.println("3. Placer une poupée dans une autre (1ère poupée dans 2ème poupée)");
-        System.out.println("4. Placer une poupée dans une autre (2ème poupée dans 3ème poupée)");
-        System.out.println("5. Quitter");
+        System.out.println("3. Placer une poupée dans une autre");
+        System.out.println("4. Quitter");
         System.out.print("Choix : ");
     }
-
-
 
     private static void playWithDolls(PoupeeRusse... dolls) {
         System.out.println("Menu Jouer avec les poupées :");
@@ -94,22 +89,38 @@ public class Main {
         }
     }
 
-    private static void placeDollMenu(PoupeeRusse sourceDoll, PoupeeRusse... destinationDolls) {
+    private static void placeDollMenu(PoupeeRusse... dolls) {
         System.out.println("Menu Placer une poupée dans une autre :");
-        System.out.println("Source : Taille " + sourceDoll.getTaille());
 
-        for (int i = 0; i < destinationDolls.length; i++) {
-            System.out.println((i + 1) + ". Destination : Taille " + destinationDolls[i].getTaille());
+        // Display the available dolls
+        for (int i = 0; i < dolls.length; i++) {
+            System.out.println((i + 1) + ". Taille " + dolls[i].getTaille() + ", Ouverte : " + dolls[i].isOuverte());
         }
 
         Scanner scanner = new Scanner(System.in);
+
+        // Choose the source doll
+        System.out.println("Choisissez la poupée source (numéro) : ");
+        int sourceChoice = scanner.nextInt();
+        PoupeeRusse sourceDoll = dolls[sourceChoice - 1];
+
+        // Choose the destination doll based on size
+        System.out.println("Choisissez la poupée de destination (numéro) avec une taille plus grande : ");
         int destinationChoice = scanner.nextInt();
 
-        if (destinationChoice >= 1 && destinationChoice <= destinationDolls.length) {
-            PoupeeRusse destinationDoll = destinationDolls[destinationChoice - 1];
-            sourceDoll.placerDans(destinationDoll);
-        } else {
+        if (destinationChoice < 1 || destinationChoice > dolls.length) {
             System.out.println("Choix invalide.");
+            return;
+        }
+
+        PoupeeRusse destinationDoll = dolls[destinationChoice - 1];
+
+        // Check if the destination doll is larger than the source doll
+        if (destinationDoll.getTaille() <= sourceDoll.getTaille()) {
+            System.out.println("La taille de la poupée de destination doit être plus grande.");
+        } else {
+            sourceDoll.placerDans(destinationDoll);
         }
     }
+
 }
