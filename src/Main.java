@@ -28,7 +28,8 @@ public class Main {
                     placeDollMenu(firstDoll, secondDoll, thirdDoll);
                     break;
                 case 4:
-                    break; // Removed choice 4
+                    takeOutOfDollMenu(firstDoll, secondDoll, thirdDoll);
+                    break;
                 case 5:
                     System.out.println("Sortie de l'application.");
                     break;
@@ -47,7 +48,8 @@ public class Main {
         System.out.println("1. Jouer avec les poupées");
         System.out.println("2. Afficher les informations des poupées");
         System.out.println("3. Placer une poupée dans une autre");
-        System.out.println("4. Quitter");
+        System.out.println("4. Sortir une poupée d'une autre");
+        System.out.println("5. Quitter");
         System.out.print("Choix : ");
     }
 
@@ -99,12 +101,12 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        // Choose the source doll
+        
         System.out.println("Choisissez la poupée source (numéro) : ");
         int sourceChoice = scanner.nextInt();
         PoupeeRusse sourceDoll = dolls[sourceChoice - 1];
 
-        // Choose the destination doll based on size
+
         System.out.println("Choisissez la poupée de destination (numéro) avec une taille plus grande : ");
         int destinationChoice = scanner.nextInt();
 
@@ -115,12 +117,39 @@ public class Main {
 
         PoupeeRusse destinationDoll = dolls[destinationChoice - 1];
 
-        // Check if the destination doll is larger than the source doll
+        //
         if (destinationDoll.getTaille() <= sourceDoll.getTaille()) {
             System.out.println("La taille de la poupée de destination doit être plus grande.");
         } else {
             sourceDoll.placerDans(destinationDoll);
         }
     }
+    private static void takeOutOfDollMenu(PoupeeRusse... dolls) {
+        System.out.println("Menu Sortir une poupee d'une autre :");
 
+
+        for (int i = 0; i < dolls.length; i++) {
+            PoupeeRusse doll = dolls[i];
+            PoupeeRusse internalDoll = doll.getPoupeeInterne();
+            if (internalDoll != null) {
+                System.out.println((i + 1) + ". Taille " + doll.getTaille() + ", Interne : Taille " + internalDoll.getTaille());
+            }
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+
+        System.out.println("Choisissez la poupée source (numero) : ");
+        int sourceChoice = scanner.nextInt();
+        PoupeeRusse sourceDoll = dolls[sourceChoice - 1];
+
+
+        PoupeeRusse internalDoll = sourceDoll.getPoupeeInterne();
+        if (internalDoll != null) {
+            sourceDoll.sortirDe(internalDoll);
+            System.out.println("La poupée russe de taille " + internalDoll.getTaille() + " a été sortie de la poupée source.");
+        } else {
+            System.out.println("La poupée source ne contient pas d'autre poupée.");
+        }
+    }
 }
